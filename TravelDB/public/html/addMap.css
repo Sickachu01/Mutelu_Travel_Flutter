@@ -1,0 +1,105 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f5e5; /* สีพื้นหลังอ่อน สีเบจ */
+    margin: 0;
+    padding: 0; /* เอา padding ออก */
+    height: 100vh; /* ให้ body มีความสูงเต็มหน้าจอ */
+    display: flex; /* ใช้ flexbox */
+    flex-direction: column; /* แสดงในแนวตั้ง */
+    justify-content: flex-start; /* จัดให้อยู่ที่ด้านบนสุด */
+    align-items: center; /* จัดกลางแนวนอน */
+}
+
+h1 {
+    text-align: center;
+    color: #3c6c3f; /* สีเขียวเข้ม */
+    width: 100%; /* ทำให้ h1 เต็มความกว้าง */
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+    margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่าง */
+}
+
+form {
+    background: #ffffff; /* สีพื้นหลังของฟอร์ม */
+    padding: 40px; /* เพิ่ม padding เพื่อให้ฟอร์มดูสบายตา */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* เงาที่เด่นชัดขึ้น */
+    width: 95%; /* กำหนดความกว้างของฟอร์มเป็น 95% */
+    max-width: 1400px; /* กำหนดความกว้างสูงสุดของฟอร์ม */
+    height: calc(100vh - 80px); /* ให้ฟอร์มสูงเต็มจอหักด้วยระยะขอบ */
+    overflow: auto; /* ให้มี scroll bar ถ้าข้อมูลมากเกินไป */
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+    margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่าง */
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #3c6c3f; /* สีเขียวเข้ม */
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px; /* เพิ่มระยะห่างด้านล่าง */
+    border: 1px solid #b0b0b0; /* สีเทาอ่อน */
+    border-radius: 4px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px; /* ปรับระยะห่างระหว่างปุ่ม */
+    margin-bottom: 15px; /* ระยะห่างด้านล่าง */
+}
+
+.side-button {
+    background-color: #a8e1a3; /* สีเขียวอ่อน */
+    color: #3c6c3f; /* สีเขียวเข้ม */
+    border: none;
+    padding: 15px 20px; /* เพิ่ม padding เพื่อให้ปุ่มใหญ่ขึ้น */
+    border-radius: 5px; /* ปรับให้มุมมน */
+    cursor: pointer;
+    font-size: 14px; /* ขนาดฟอนต์ใหญ่ขึ้น */
+    transition: background-color 0.3s ease; /* การเปลี่ยนสีเมื่อชี้เมาส์ */
+}
+
+.side-button:hover {
+    background-color: #88c88e; /* สีเขียวที่เข้มขึ้นเมื่อชี้เมาส์ */
+}
+
+.side-button.active {
+    background-color: #3c6c3f; /* สีเขียวเข้มสำหรับปุ่มที่เลือก */
+    color: white; /* เปลี่ยนสีข้อความให้ขาว */
+}
+
+button {
+    padding: 10px;
+    font-size: 14px;
+    color: white;
+    background-color: #3c6c3f; /* สีเขียวเข้ม */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* ทำให้ปุ่มกว้างเต็ม */
+}
+
+button:hover {
+    background-color: #2b4e2b; /* สีเขียวเข้มกว่าเมื่อชี้เมาส์ */
+}
+
+#loading {
+    text-align: center;
+    font-size: 18px;
+    display: none; /* ซ่อนโดยเริ่มต้น */
+    color: #3c6c3f; /* สีเขียวเข้ม */
+    font-weight: bold;
+}
+
+#error-message {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+}

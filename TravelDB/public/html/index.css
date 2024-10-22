@@ -1,0 +1,162 @@
+/* General body styling */
+body { 
+    font-family: 'Arial', sans-serif;
+    background-color: #f0e5d8; /* Light background color */
+    margin: 0;
+    padding: 20px;
+    position: relative; /* Relative positioning for body */
+}
+
+/* Title styling */
+h1 {
+    text-align: center;
+    color: #5c3f2c; /* Dark brown color */
+}
+
+/* Loading and error message */
+#loading {
+    display: none; /* Hide loading by default */
+    text-align: center;
+    margin: 20px;
+}
+
+/* Error message styling */
+#error-message {
+    color: red;
+    text-align: center;
+}
+
+/* Table container styling */
+.table-container {
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white; /* White background for the table */
+}
+
+/* Table header styling */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #b29576; /* Light brown */
+    color: white;
+}
+
+/* Table title styling */
+.table-title {
+    margin: 0;
+}
+
+/* Button styling */
+.add-button {
+    background-color: #5c3f2c; /* Dark brown */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: #7c5a3b; /* Lighter brown on hover */
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table cell styling */
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Button styles for Edit and Delete */
+.edit-button, .delete-button {
+    background-color: #e6b82d; /* Yellow for edit button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0 5px; /* Space between buttons */
+}
+
+.edit-button:hover {
+    background-color: #d3a827; /* Darker yellow on hover */
+}
+
+.delete-button {
+    background-color: #d9534f; /* Red for delete button */
+}
+
+.delete-button:hover {
+    background-color: #c9302c; /* Darker red on hover */
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Close button in modal */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form input styling */
+input[type=text], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Submit button in modal */
+button[type=submit] {
+    background-color: #5c3f2c; /* Dark brown */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button[type=submit]:hover {
+    background-color: #7c5a3b; /* Lighter brown on hover */
+}

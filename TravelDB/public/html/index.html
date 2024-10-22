@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel DataBase</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1>Database Travel App</h1>
+    <div id="loading">Loading...</div>
+    <div id="error-message"></div>
+    
+    <!-- ตารางแสดงข้อมูล travels -->
+    <div class="table-container">
+        <div class="table-header">
+            <h2 class="table-title">Travels</h2>
+            <button class="add-button" onclick="window.location.href='addTravel.html'">Add Travel Data</button>
+        </div>
+        <table id="travel-table">
+            <thead>
+                <tr>
+                    <th>Name Location</th>
+                    <th>Sub Name</th>
+                    <th>Detail</th>
+                    <th>Side</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                    <th>Image 1</th>
+                    <th>Image 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ตารางแสดงข้อมูล maps -->
+    <div class="table-container">
+        <div class="table-header">
+            <h2 class="table-title">Maps</h2>
+            <button class="add-button" onclick="window.location.href='addMap.html'">Add Map</button>
+        </div>
+        <table id="map-table">
+            <thead>
+                <tr>
+                    <th>Name Location</th>
+                    <th>Side</th>
+                    <th>Location</th>
+                    <th>Time</th>
+                    <th>Image 1</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal สำหรับแก้ไข travel -->
+    <div id="editTravelModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditTravelModal()">&times;</span>
+            <h2>Edit Travel Database</h2>
+            <form id="editTravelForm">
+                <label for="travelName">ชื่อสถานที่:</label>
+                <input type="text" id="travelName" required>
+                <label for="travelSubName">ชื่อย่อ:</label>
+                <input type="text" id="travelSubName">
+                <label for="travelDetail">รายละเอียด:</label>
+                <textarea id="travelDetail"></textarea>
+                <label for="travelSide">ขอพรด้าน:</label>
+                <input type="text" id="travelSide">
+                <label for="travelLocation">สถานที่ตั้ง:</label>
+                <input type="text" id="travelLocation">
+                <label for="travelTime">เวลาเปิด-ปิด:</label>
+                <input type="text" id="travelTime">
+                <label for="travelImage1">ลิ้งภาพสถานที่:</label>
+                <input type="text" id="travelImage1">
+                <label for="travelImage2">ลิ้งภาพสถานที่:</label>
+                <input type="text" id="travelImage2">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับแก้ไข map -->
+    <div id="editMapModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditMapModal()">&times;</span>
+            <h2>Edit Map Database</h2>
+            <form id="editMapForm">
+                <label for="mapName">ชื่อสถานที่:</label>
+                <input type="text" id="mapName" required>
+                <label for="mapSide">ขอพรด้าน:</label>
+                <input type="text" id="mapSide" required>
+                <label for="mapLocation">สถานที่ตั้ง:</label>
+                <input type="text" id="mapLocation" required>
+                <label for="mapTime">เวลาเปิด-ปิด:</label>
+                <input type="text" id="mapTime">
+                <label for="mapImage1">ลิ้งภาพสถานที่:</label>
+                <input type="text" id="mapImage1">
+                <label for="mapLatitude">Latitude:</label>
+                <input type="text" id="mapLatitude" required>
+                <label for="mapLongitude">Longitude:</label>
+                <input type="text" id="mapLongitude" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ฟังก์ชัน JavaScript สำหรับดึงข้อมูล travels และ maps -->
+    <script>
+        let currentTravelId = null; // เก็บ ID ของ travel ที่จะถูกแก้ไข
+        let currentMapId = null; // เก็บ ID ของ map ที่จะถูกแก้ไข
+
+        // ดึงข้อมูล travels จากเซิร์ฟเวอร์
+        async function fetchTravels() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error-message').textContent = '';
+
+            try {
+                const response = await fetch('http://localhost:3001/travels');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const tableBody = document.getElementById('travel-table').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = '';
+
+                data.forEach(item => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = item.namelocation;
+                    row.insertCell(1).textContent = item.subname || 'N/A';
+                    row.insertCell(2).textContent = item.detail || 'N/A';
+                    row.insertCell(3).textContent = item.side || 'N/A';
+                    row.insertCell(4).textContent = item.location || 'N/A';
+                    row.insertCell(5).textContent = item.time || 'N/A';
+                    
+                    const imgCell1 = row.insertCell(6);
+                    const imgCell2 = row.insertCell(7);
+                    
+                    const img1 = document.createElement('img');
+                    img1.src = item.Image1;
+                    img1.alt = 'Image 1';
+                    img1.style.width = '100px';
+                    img1.onerror = () => { img1.src = 'https://via.placeholder.com/100'; };
+                    imgCell1.appendChild(img1);
+
+                    const img2 = document.createElement('img');
+                    img2.src = item.Image2;
+                    img2.alt = 'Image 2';
+                    img2.style.width = '100px';
+                    img2.onerror = () => { img2.src = 'https://via.placeholder.com/100'; };
+                    imgCell2.appendChild(img2);
+
+                    const actionsCell = row.insertCell(8);
+                    
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.className = 'edit-button';
+                    editButton.onclick = () => openEditTravelModal(item._id, item);
+                    actionsCell.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.onclick = () => deleteTravel(item._id);
+                    actionsCell.appendChild(deleteButton);
+                });
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'เกิดข้อผิดพลาดในการดึงข้อมูล travels: ' + error.message;
+                console.error('Error fetching travel data:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // ดึงข้อมูล maps จากเซิร์ฟเวอร์
+        async function fetchMaps() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error-message').textContent = '';
+
+            try {
+                const response = await fetch('http://localhost:3001/maps');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const tableBody = document.getElementById('map-table').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = '';
+
+                data.forEach(item => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = item.namelocation;
+                    row.insertCell(1).textContent = item.side || 'N/A';
+                    row.insertCell(2).textContent = item.location || 'N/A';
+                    row.insertCell(3).textContent = item.time || 'N/A';
+                    
+                    const imgCell = row.insertCell(4);
+                    const img = document.createElement('img');
+                    img.src = item.Image1;
+                    img.alt = 'Map Image';
+                    img.style.width = '100px';
+                    img.onerror = () => { img.src = 'https://via.placeholder.com/100'; };
+                    imgCell.appendChild(img);
+                    
+                    row.insertCell(5).textContent = item.latitude;
+                    row.insertCell(6).textContent = item.longitude;
+
+                    const actionsCell = row.insertCell(7);
+                    
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.className = 'edit-button';
+                    editButton.onclick = () => openEditMapModal(item._id, item);
+                    actionsCell.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-button';
+                    deleteButton.onclick = () => deleteMap(item._id);
+                    actionsCell.appendChild(deleteButton);
+                });
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'เกิดข้อผิดพลาดในการดึงข้อมูล maps: ' + error.message;
+                console.error('Error fetching map data:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // ฟังก์ชันสำหรับลบ travel
+        async function deleteTravel(id) {
+            if (confirm('คุณต้องการลบข้อมูล travel นี้ใช่ไหม?')) {
+                try {
+                    const response = await fetch(`http://localhost:3001/travels/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    alert('ลบข้อมูล travel เรียบร้อยแล้ว');
+                    fetchTravels(); // เรียกข้อมูลใหม่หลังจากลบ
+                } catch (error) {
+                    alert('เกิดข้อผิดพลาดในการลบ travel: ' + error.message);
+                    console.error('Error deleting travel:', error);
+                }
+            }
+        }
+
+        // ฟังก์ชันสำหรับลบ map
+        async function deleteMap(id) {
+            if (confirm('คุณต้องการลบข้อมูล map นี้ใช่ไหม?')) {
+                try {
+                    const response = await fetch(`http://localhost:3001/maps/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    alert('ลบข้อมูล map เรียบร้อยแล้ว');
+                    fetchMaps(); // เรียกข้อมูลใหม่หลังจากลบ
+                } catch (error) {
+                    alert('เกิดข้อผิดพลาดในการลบ map: ' + error.message);
+                    console.error('Error deleting map:', error);
+                }
+            }
+        }
+
+        // ฟังก์ชันเปิด modal แก้ไข travel
+        function openEditTravelModal(id, travel) {
+            currentTravelId = id;
+            document.getElementById('travelName').value = travel.namelocation;
+            document.getElementById('travelSubName').value = travel.subname || '';
+            document.getElementById('travelDetail').value = travel.detail || '';
+            document.getElementById('travelSide').value = travel.side || '';
+            document.getElementById('travelLocation').value = travel.location || '';
+            document.getElementById('travelTime').value = travel.time || '';
+            document.getElementById('travelImage1').value = travel.Image1 || '';
+            document.getElementById('travelImage2').value = travel.Image2 || '';
+            document.getElementById('editTravelModal').style.display = 'block';
+        }
+
+        // ฟังก์ชันเปิด modal แก้ไข map
+        function openEditMapModal(id, map) {
+            currentMapId = id;
+            document.getElementById('mapName').value = map.namelocation;
+            document.getElementById('mapSide').value = map.side || '';
+            document.getElementById('mapLocation').value = map.location || '';
+            document.getElementById('mapTime').value = map.time || '';
+            document.getElementById('mapImage1').value = map.Image1 || '';
+            document.getElementById('mapLatitude').value = map.latitude || '';
+            document.getElementById('mapLongitude').value = map.longitude || '';
+            document.getElementById('editMapModal').style.display = 'block';
+        }
+
+        // ฟังก์ชันปิด modal แก้ไข travel
+        function closeEditTravelModal() {
+            document.getElementById('editTravelModal').style.display = 'none';
+        }
+
+        // ฟังก์ชันปิด modal แก้ไข map
+        function closeEditMapModal() {
+            document.getElementById('editMapModal').style.display = 'none';
+        }
+
+        // ฟังก์ชันเมื่อส่งข้อมูลแบบฟอร์มแก้ไข travel
+        document.getElementById('editTravelForm').onsubmit = async function (event) {
+            event.preventDefault();
+            const travelData = {
+                namelocation: document.getElementById('travelName').value,
+                subname: document.getElementById('travelSubName').value,
+                detail: document.getElementById('travelDetail').value,
+                side: document.getElementById('travelSide').value,
+                location: document.getElementById('travelLocation').value,
+                time: document.getElementById('travelTime').value,
+                Image1: document.getElementById('travelImage1').value,
+                Image2: document.getElementById('travelImage2').value
+            };
+
+            try {
+                const response = await fetch(`http://localhost:3001/travels/${currentTravelId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(travelData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                alert('แก้ไขข้อมูล travel เรียบร้อยแล้ว');
+                closeEditTravelModal();
+                fetchTravels(); // เรียกข้อมูลใหม่หลังจากแก้ไข
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการแก้ไข travel: ' + error.message);
+                console.error('Error editing travel:', error);
+            }
+        };
+
+        // ฟังก์ชันเมื่อส่งข้อมูลแบบฟอร์มแก้ไข map
+        document.getElementById('editMapForm').onsubmit = async function (event) {
+            event.preventDefault();
+            const mapData = {
+                namelocation: document.getElementById('mapName').value,
+                side: document.getElementById('mapSide').value,
+                location: document.getElementById('mapLocation').value,
+                time: document.getElementById('mapTime').value,
+                Image1: document.getElementById('mapImage1').value,
+                latitude: document.getElementById('mapLatitude').value,
+                longitude: document.getElementById('mapLongitude').value
+            };
+
+            try {
+                const response = await fetch(`http://localhost:3001/maps/${currentMapId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(mapData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                alert('แก้ไขข้อมูล map เรียบร้อยแล้ว');
+                closeEditMapModal();
+                fetchMaps(); // เรียกข้อมูลใหม่หลังจากแก้ไข
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการแก้ไข map: ' + error.message);
+                console.error('Error editing map:', error);
+            }
+        };
+
+        // เรียกฟังก์ชันเพื่อดึงข้อมูล travels และ maps
+        fetchTravels();
+        fetchMaps();
+    </script>
+</body>
+</html>
